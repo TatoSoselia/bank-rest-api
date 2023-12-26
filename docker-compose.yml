@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  app:
+  api:
     build:
       context: .
       args:
@@ -9,11 +9,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app
-    command: >
+      - ./src:/src
+    command:
       sh -c "python manage.py wait_for_db &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=db
       - DB_NAME=devdb
@@ -23,7 +23,7 @@ services:
       - db
 
   db:
-    image: postgres:13-alpine
+    image: postgres:16.1-alpine3.19
     volumes:
       - dev-db-data:/var/lib/postgresql/data
     environment:
